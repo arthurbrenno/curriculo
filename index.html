@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arthur Brenno | Desenvolvedor</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Source+Code+Pro:wght@400;700&display=swap');
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f8f9fa;
+            color: #212529;
+        }
+        
+        .code-font {
+            font-family: 'Source Code Pro', monospace;
+        }
+        
+        .tech-pill {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            margin: 0.2rem;
+            border-radius: 3px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #fff;
+            background-color: #0d6efd;
+            transition: all 0.3s ease;
+        }
+        
+        .tech-pill:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card {
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            background-color: white;
+        }
+        
+        .card:hover {
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            transform: translateY(-3px);
+        }
+        
+        .section-title {
+            position: relative;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 50px;
+            height: 3px;
+            background-color: #0d6efd;
+        }
+        
+        .project-card {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .project-card .card-body {
+            flex: 1;
+        }
+        
+        .skill-progress {
+            height: 8px;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+        }
+        
+        .animated-bg {
+            background: linear-gradient(-45deg, #1a73e8, #4285f4, #0d6efd, #0a58ca);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+        }
+        
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 2px;
+            background-color: #dee2e6;
+        }
+        
+        .timeline-item {
+            position: relative;
+            padding-bottom: 1.5rem;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -2rem;
+            top: 0.25rem;
+            height: 12px;
+            width: 12px;
+            border-radius: 50%;
+            background-color: #0d6efd;
+        }
+        
+        .floating-button {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 1000;
+        }
+        
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            .card {
+                box-shadow: none !important;
+                border: 1px solid #dee2e6 !important;
+            }
+            body {
+                background-color: white !important;
+            }
+        }
+        
+        .skill-category {
+            border-left: 3px solid #0d6efd;
+            padding-left: 0.75rem;
+            margin-bottom: 1.25rem;
+        }
+        
+        .navbar {
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        
+        .blob {
+            position: absolute;
+            top: -150px;
+            right: -150px;
+            width: 500px;
+            height: 500px;
+            background-color: rgba(13, 110, 253, 0.1);
+            border-radius: 43% 57% 70% 30% / 38% 45% 55% 62%;
+            animation: blob-animation 12s linear infinite alternate;
+            z-index: -1;
+        }
+        
+        @keyframes blob-animation {
+            0% {
+                border-radius: 43% 57% 70% 30% / 38% 45% 55% 62%;
+                transform: rotate(0deg);
+            }
+            50% {
+                border-radius: 63% 37% 55% 45% / 48% 65% 35% 52%;
+                transform: rotate(180deg);
+            }
+            100% {
+                border-radius: 43% 57% 70% 30% / 38% 45% 55% 62%;
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar py-3 px-4 fixed top-0 w-full bg-white bg-opacity-80 shadow-sm z-50 no-print">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold text-blue-600">AB</a>
+            <div class="flex space-x-6">
+                <a href="#sobre" class="text-gray-700 hover:text-blue-600 transition">Sobre</a>
+                <a href="#habilidades" class="text-gray-700 hover:text-blue-600 transition">Habilidades</a>
+                <a href="#projetos" class="text-gray-700 hover:text-blue-600 transition">Projetos</a>
+                <a href="#ia-educacao" class="text-gray-700 hover:text-blue-600 transition">IA & Educação</a>
+                <a href="#publicacoes" class="text-gray-700 hover:text-blue-600 transition">Publicações</a>
+                <button id="downloadBtn" class="bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700 transition">
+                    <i class="fas fa-download mr-1"></i> Download PDF
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mx-auto px-4 py-24" id="content">
+        <div class="blob"></div>
+        <section id="sobre" class="mb-12 relative">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="md:col-span-2">
+                    <h1 class="text-4xl font-bold mb-1">Arthur Brenno</h1>
+                    <p class="text-xl text-gray-600 mb-6">Desenvolvedor e Arquiteto de Software | 21 anos</p>
+                    <div class="bg-white p-6 card mb-6">
+                        <h2 class="section-title text-2xl font-bold">Perfil Profissional</h2>
+                        <p class="text-gray-700 mb-4">
+                            Desenvolvedor fullstack e arquiteto de software com foco em soluções de alto desempenho, IA generativa aplicada à educação e desenvolvimento de frameworks proprietários. 
+                            Especialista em Python, PHP, cloud computing e design de APIs, com forte experiência em DevOps e machine learning.
+                        </p>
+                        <div class="flex flex-wrap mt-4">
+                            <span class="tech-pill bg-blue-600 mr-2 mb-2">Python</span>
+                            <span class="tech-pill bg-indigo-600 mr-2 mb-2">PHP</span>
+                            <span class="tech-pill bg-green-600 mr-2 mb-2">IA Generativa</span>
+                            <span class="tech-pill bg-purple-600 mr-2 mb-2">Google Cloud</span>
+                            <span class="tech-pill bg-yellow-600 mr-2 mb-2">Machine Learning</span>
+                            <span class="tech-pill bg-red-600 mr-2 mb-2">APIs</span>
+                            <span class="tech-pill bg-teal-600 mr-2 mb-2">DevOps</span>
+                            <span class="tech-pill bg-gray-700 mr-2 mb-2">Arquitetura de Software</span>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-white p-6 card">
+                            <h3 class="font-bold text-lg mb-3"><i class="fas fa-user-graduate text-blue-600 mr-2"></i>Formação</h3>
+                            <p class="text-gray-700">Cursando Sistemas de Informação (7 periodo) na Uniube.</p>
+                        </div>
+                        <div class="bg-white p-6 card">
+                            <h3 class="font-bold text-lg mb-3"><i class="fas fa-language text-blue-600 mr-2"></i>Idiomas</h3>
+                            <div class="flex items-center mb-2">
+                                <span class="text-gray-700 mr-2">Português:</span>
+                                <div class="flex-1 bg-gray-200 rounded-full h-2">
+                                    <div class="bg-blue-600 h-2 rounded-full" style="width: 100%"></div>
+                                </div>
+                                <span class="ml-2 text-gray-600">Nativo</span>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="text-gray-700 mr-2">Inglês:</span>
+                                <div class="flex-1 bg-gray-200 rounded-full h-2">
+                                    <div class="bg-blue-600 h-2 rounded-full" style="width: 100%"></div>
+                                </div>
+                                <span class="ml-2 text-gray-600">Fluente</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="md:col-span-1">
+                    <div class="bg-white p-6 card h-full">
+                        <h3 class="font-bold text-lg mb-3"><i class="fas fa-brain text-blue-600 mr-2"></i>Características Pessoais</h3>
+                        <ul class="space-y-2 text-gray-700">
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                <span>Disciplinado e orientado a resultados</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                <span>Foco na experiência do desenvolvedor (DX)</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                <span>Busca constante por código limpo e arquitetura de qualidade</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                <span>Orientado a padrões de projeto e boas práticas</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                <span>Adaptabilidade a novas tecnologias</span>
+                            </li>
+                        </ul>
+                        <div class="mt-6">
+                            <h4 class="font-semibold mb-2">Contato</h4>
+                            <div class="flex items-center text-gray-700 mb-2">
+                                <i class="fas fa-envelope text-blue-600 mr-2"></i>
+                                <span>arthurbreno009@icloud.com</span>
+                            </div>
+                            <div class="flex items-center text-gray-700 mb-2">
+                                <i class="fas fa-phone text-blue-600 mr-2"></i>
+                                <span>(34) 99772-2562</span>
+                            </div>
+                            <div class="flex items-center text-gray-700">
+                                <i class="fas fa-map-marker-alt text-blue-600 mr-2"></i>
+                                <span>Uberaba</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="habilidades" class="mb-12">
+            <h2 class="section-title text-3xl font-bold">Habilidades Técnicas</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-white p-6 card">
+                    <h3 class="font-bold text-lg mb-4 text-blue-600">Desenvolvimento & Arquitetura</h3>
+                    
+                    <div class="skill-category">
+                        <h4 class="font-semibold mb-2">Linguagens & Frameworks</h4>
+                        <div class="flex flex-wrap">
+                            <span class="tech-pill bg-blue-600">Python</span>
+                            <span class="tech-pill bg-indigo-600">PHP</span>
+                            <span class="tech-pill bg-gray-700">SQL</span>
+                            <span class="tech-pill bg-green-600">JavaScript</span>
+                        </div>
+                    </div>
+                    
+                    <div class="skill-category">
+                        <h4 class="font-semibold mb-2">Desenvolvimento de APIs</h4>
+                        <div class="flex flex-wrap">
+                            <span class="tech-pill bg-purple-600">RESTful</span>
+                            <span class="tech-pill bg-pink-600">gRPC</span>
+                            <span class="tech-pill bg-red-600">Design Patterns</span>
+                            <span class="tech-pill bg-yellow-600">Litestar</span>
+                            <span class="tech-pill bg-green-600">API First Development</span>
+                        </div>
+                    </div>
+                    
+                    <div class="skill-category">
+                        <h4 class="font-semibold mb-2">Arquitetura de Software</h4>
+                        <div class="flex flex-wrap">
+                            <span class="tech-pill bg-blue-800">Domain Driven Design</span>
+                            <span class="tech-pill bg-indigo-800">Microsserviços</span>
+                            <span class="tech-pill bg-green-800">Inversão de Dependência</span>
+                            <span class="tech-pill bg-red-800">Injeção de Dependência</span>
+                            <span class="tech-pill bg-purple-800">Composição de Objetos</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-6 card">
+                    <h3 class="font-bold text-lg mb-4 text-blue-600">IA & Cloud</h3>
+                    
+                    <div class="skill-category">
+                        <h4 class="font-semibold mb-2">IA Generativa</h4>
+                        <div class="flex flex-wrap">
+                            <span class="tech-pill bg-blue-600">RAG</span>
+                            <span class="tech-pill bg-indigo-600">Semantic Chunking</span>
+                            <span class="tech-pill bg-purple-600">Graph RAG</span>
+                            <span class="tech-pill bg-green-600">Gemini</span>
+                            <span class="tech-pill bg-red-600">Entity Extraction</span>
+                            <span class="tech-pill bg-yellow-600">Ollama</span>
+                        </div>
+                    </div>
+                    
+                    <div class="skill-category">
+                        <h4 class="font-semibold mb-2">Machine Learning</h4>
+                        <div class="flex flex-wrap">
+                            <span class="tech-pill bg-blue-800">Sklearn</span>
+                            <span class="tech-pill bg-indigo-800">Pandas</span>
+                            <span class="tech-pill bg-purple-800">Regressão Linear</span>
+                            <span class="tech-pill bg-green-800">KNN</span>
+                            <span class="tech-pill bg-red-800">Random Forest</span>
+                            <span class="tech-pill bg-yellow-800">Feature Engineering</span>
+                        </div>
+                    </div>
+                    
+                    <div class="skill-category">
+                        <h4 class="font-semibold mb-2">Google Cloud</h4>
+                        <div class="flex flex-wrap">
+                            <span class="tech-pill bg-blue-600">IAM</span>
+                            <span class="tech-pill bg-indigo-600">Vertex AI</span>
+                            <span class="tech-pill bg-purple-600">Cloud Storage</span>
+                            <span class="tech-pill bg-green-600">OAuth</span>
+                            <span class="tech-pill bg-red-600">Discovery Engine</span>
+                            <span class="tech-pill bg-yellow-600">Agent Builder</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-6 card">
+                    <h3 class="font-bold text-lg mb-4 text-blue-600">DevOps & Infraestrutura</h3>
+                    
+                    <div class="skill-category">
+                        <h4 class="font-semibold mb-2">CI/CD & Automação</h4>
+                        <div class="flex flex-wrap">
+                            <span class="tech-pill bg-blue-600">GitHub Actions</span>
+                            <span class="tech-pill bg-indigo-600">Makefile</span>
+                            <span class="tech-pill bg-purple-600">Git Hooks</span>
+                            <span class="tech-pill bg-green-600">TDD</span>
+                            <span class="tech-pill bg-red-600">Pytest</span>
+                        </div>
+                    </div>
+                    
+                    <div class="skill-category">
+                        <h4 class="font-semibold mb-2">Containerização & Deploy</h4>
+                        <div class="flex flex-wrap">
+                            <span class="tech-pill bg-blue-800">Docker</span>
+                            <span class="tech-pill bg-indigo-800">Portainer</span>
+                            <span class="tech-pill bg-purple-800">Dev Containers</span>
+                            <span class="tech-pill bg-green-800">Gunicorn/Uvicorn</span>
+                        </div>
+                    </div>
+                    
+                    <div class="skill-category">
+                        <h4 class="font-semibold mb-2">Mensageria & Banco de Dados</h4>
+                        <div class="flex flex-wrap">
+                            <span class="tech-pill bg-blue-600">RabbitMQ</span>
+                            <span class="tech-pill bg-indigo-600">PL/SQL</span>
+                            <span class="tech-pill bg-purple-600">Milvus</span>
+                            <span class="tech-pill bg-green-600">Clickhouse</span>
+                            <span class="tech-pill bg-red-600">Vector Stores</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-6 card">
+                    <h3 class="font-bold text-lg mb-4 text-blue-600">Qualidade & Metodologias</h3>
+                    
+                    <div class="skill-category">
+                        <h4 class="font-semibold mb-2">Análise de Qualidade</h4>
+                        <div class="flex flex-wrap">
+                            <span class="tech-pill bg-blue-600">Pyright</span>
+                            <span class="tech-pill bg-indigo-600">Mypy</span>
+                            <span class="tech-pill bg-purple-600">Ruff</span>
+                            <span class="tech-pill bg-green-600">Tipagem Estática</span>
+                            <span class="tech-pill bg-red-600">TDD</span>
+                        </div>
+                    </div>
+                    
+                    <div class="skill-category">
+                        <h4 class="font-semibold mb-2">Design Patterns</h4>
+                        <div class="flex flex-wrap">
+                            <span class="tech-pill bg-blue-800">Strategy</span>
+                            <span class="tech-pill bg-indigo-800">Composite</span>
+                            <span class="tech-pill bg-purple-800">Facade</span>
+                            <span class="tech-pill bg-green-800">Null Object</span>
+                            <span class="tech-pill bg-red-800">Bridge</span>
+                            <span class="tech-pill bg-yellow-800">Factories</span>
+                        </div>
+                    </div>
+                    
+                    <div class="skill-category">
+                        <h4 class="font-semibold mb-2">Metodologias & Ferramentas</h4>
+                        <div class="flex flex-wrap">
+                            <span class="tech-pill bg-blue-600">Time boxing</span>
+                            <span class="tech-pill bg-indigo-600">DDD</span>
+                            <span class="tech-pill bg-purple-600">Langfuse</span>
+                            <span class="tech-pill bg-green-600">Playwright</span>
+                            <span class="tech-pill bg-red-600">Web Scraping</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="projetos" class="mb-12">
+            <h2 class="section-title text-3xl font-bold">Projetos Destacados</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white p-6 card project-card">
+                    <h3 class="font-bold text-lg mb-3">Framework Próprio para IA Generativa</h3>
+                    <div class="text-gray-700 mb-4">
+                        <p>Desenvolvimento completo de framework independente para IA Generativa, atuando como arquiteto de software.</p>
+                    </div>
+                    <div class="mt-auto">
+                        <div class="flex flex-wrap mt-2">
+                            <span class="tech-pill bg-blue-600 text-xs">RAG</span>
+                            <span class="tech-pill bg-indigo-600 text-xs">Semantic Chunking</span>
+                            <span class="tech-pill bg-purple-600 text-xs">Graph RAG</span>
+                            <span class="tech-pill bg-green-600 text-xs">Python</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-6 card project-card">
+                    <h3 class="font-bold text-lg mb-3">Framework para Desenvolvimento Interno</h3>
+                    <div class="text-gray-700 mb-4">
+                        <p>Construção de framework proprietário para uso interno utilizando PHP & Python com msgpack/litestar/msgspec.</p>
+                    </div>
+                    <div class="mt-auto">
+                        <div class="flex flex-wrap mt-2">
+                            <span class="tech-pill bg-blue-600 text-xs">PHP</span>
+                            <span class="tech-pill bg-indigo-600 text-xs">Python</span>
+                            <span class="tech-pill bg-purple-600 text-xs">Litestar</span>
+                            <span class="tech-pill bg-green-600 text-xs">Msgpack</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-6 card project-card">
+                    <h3 class="font-bold text-lg mb-3">Engine para Treinamento de Modelos com IA</h3>
+                    <div class="text-gray-700 mb-4">
+                        <p>Framework para criar uma engine capaz de treinar modelos usando sklearn dinamicamente, com configuração automática via IA generativa.</p>
+                    </div>
+                    <div class="mt-auto">
+                        <div class="flex flex-wrap mt-2">
+                            <span class="tech-pill bg-blue-600 text-xs">Sklearn</span>
+                            <span class="tech-pill bg-indigo-600 text-xs">Pandas</span>
+                            <span class="tech-pill bg-purple-600 text-xs">Joblib</span>
+                            <span class="tech-pill bg-green-600 text-xs">Machine Learning</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-6 card project-card">
+                    <h3 class="font-bold text-lg mb-3">Módulo de Processamento de Arquivos</h3>
+                    <div class="text-gray-700 mb-4">
+                        <p>Pipeline de transformação de arquivos diversos (MP4, MP3, PDF, PPTX, DOCX, XLS, CSV, TXT, DWG, imagens) para formato markdown, compatível com IA generativa.</p>
+                    </div>
+                    <div class="mt-auto">
+                        <div class="flex flex-wrap mt-2">
+                            <span class="tech-pill bg-blue-600 text-xs">Processamento</span>
+                            <span class="tech-pill bg-indigo-600 text-xs">Pipeline</span>
+                            <span class="tech-pill bg-purple-600 text-xs">Markdown</span>
+                            <span class="tech-pill bg-green-600 text-xs">Conversão</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-6 card project-card">
+                    <h3 class="font-bold text-lg mb-3">Web Scraping Inteligente</h3>
+                    <div class="text-gray-700 mb-4">
+                        <p>Desenvolvimento de módulo de biblioteca para webscraping inteligente usando Playwright e IA generativa para auxílio na busca de documentos.</p>
+                    </div>
+                    <div class="mt-auto">
+                        <div class="flex flex-wrap mt-2">
+                            <span class="tech-pill bg-blue-600 text-xs">Playwright</span>
+                            <span class="tech-pill bg-indigo-600 text-xs">Web Scraping</span>
+                            <span class="tech-pill bg-purple-600 text-xs">Async</span>
+                            <span class="tech-pill bg-green-600 text-xs">IA Generativa</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-6 card project-card">
+                    <h3 class="font-bold text-lg mb-3">Pipeline de Validação de Documentos</h3>
+                    <div class="text-gray-700 mb-4">
+                        <p>Sistema para validação de documentos sensíveis utilizando OCR, LLMs locais com Ollama e modelos do Hugging Face.</p>
+                    </div>
+                    <div class="mt-auto">
+                        <div class="flex flex-wrap mt-2">
+                            <span class="tech-pill bg-blue-600 text-xs">OCR</span>
+                            <span class="tech-pill bg-indigo-600 text-xs">Ollama</span>
+                            <span class="tech-pill bg-purple-600 text-xs">LLMs</span>
+                            <span class="tech-pill bg-green-600 text-xs">Hugging Face</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="ia-educacao" class="mb-12">
+            <h2 class="section-title text-3xl font-bold">Projetos de IA para Educação</h2>
+            <div class="bg-white p-6 card mb-6">
+                <p class="text-gray-700 mb-4">
+                    Conjunto de projetos educacionais utilizando IA generativa para otimizar processos, 
+                    melhorar a qualidade de conteúdo e proporcionar experiências educacionais personalizadas.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-white p-6 card">
+                    <h3 class="font-bold text-lg mb-3">Correção de Redações com IA</h3>
+                    <div class="text-gray-700">
+                        <p>Sistema para correção automatizada de redações utilizando IA generativa com base nos critérios de correção do ENEM.</p>
+                    </div>
+                    <div class="flex flex-wrap mt-3">
+                        <span class="tech-pill bg-blue-600 text-xs">ENEM</span>
+                        <span class="tech-pill bg-indigo-600 text-xs">Correção</span>
+                        <span class="tech-pill bg-purple-600 text-xs">IA Generativa</span>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-6 card">
+                    <h3 class="font-bold text-lg mb-3">Correção de Questões Discursivas</h3>
+                    <div class="text-gray-700">
+                        <p>Sistema para avaliação de questões discursivas enviadas por alunos, incluindo processamento de arquivos de diferentes formatos.</p>
+                    </div>
+                    <div class="flex flex-wrap mt-3">
+                        <span class="tech-pill bg-blue-600 text-xs">Processamento</span>
+                        <span class="tech-pill bg-indigo-600 text-xs">Markdown</span>
+                        <span class="tech-pill bg-purple-600 text-xs">IA Generativa</span>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-6 card">
+                    <h3 class="font-bold text-lg mb-3">Geração de Questões Objetivas</h3>
+                    <div class="text-gray-700">
+                        <p>Criação de questões objetivas de alta qualidade usando Taxonomia de Bloom e Teoria Clássica dos Testes no formato ENADE.</p>
+                    </div>
+                    <div class="flex flex-wrap mt-3">
+                        <span class="tech-pill bg-blue-600 text-xs">Taxonomia de Bloom</span>
+                        <span class="tech-pill bg-indigo-600 text-xs">TCT</span>
+                        <span class="tech-pill bg-purple-600 text-xs">ENADE</span>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-6 card">
+                    <h3 class="font-bold text-lg mb-3">Podcasts a partir de Vídeos</h3>
+                    <div class="text-gray-700">
+                        <p>Criação automatizada de podcasts educacionais a partir de conteúdo em vídeo usando IA generativa.</p>
+                    </div>
+                    <div class="flex flex-wrap mt-3">
+                        <span class="tech-pill bg-blue-600 text-xs">Podcasts</span>
+                        <span class="tech-pill bg-indigo-600 text-xs">Conversão</span>
+                        <span class="tech-pill bg-purple-600 text-xs">Áudio</span>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-6 card">
+                    <h3 class="font-bold text-lg mb-3">Classificação de Atendimentos</h3>
+                    <div class="text-gray-700">
+                        <p>Sistema para classificação automática de atendimentos de alunos em categorias, subcategorias e assuntos usando IA generativa.</p>
+                    </div>
+                    <div class="flex flex-wrap mt-3">
+                        <span class="tech-pill bg-blue-600 text-xs">Classificação</span>
+                        <span class="tech-pill bg-indigo-600 text-xs">Categorização</span>
+                        <span class="tech-pill bg-purple-600 text-xs">Atendimento</span>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-6 card">
+                    <h3 class="font-bold text-lg mb-3">Sugestão de Respostas via RAG</h3>
+                    <div class="text-gray-700">
+                        <p>Sistema de sugestão de respostas para analistas internos com base em documentos da empresa utilizando Retrieval Augmented Generation.</p>
+                    </div>
+                    <div class="flex flex-wrap mt-3">
+                        <span class="tech-pill bg-blue-600 text-xs">RAG</span>
+                        <span class="tech-pill bg-indigo-600 text-xs">Knowledge Base</span>
+                        <span class="tech-pill bg-purple-600 text-xs">Assistente</span>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-6 card">
+                    <h3 class="font-bold text-lg mb-3">API de Tickets e Ações</h3>
+                    <div class="text-gray-700">
+                        <p>Desenvolvimento de API para busca e gerenciamento de tickets e ações específicas no sistema educacional.</p>
+                    </div>
+                    <div class="flex flex-wrap mt-3">
+                        <span class="tech-pill bg-blue-600 text-xs">API</span>
+                        <span class="tech-pill bg-indigo-600 text-xs">Tickets</span>
+                        <span class="tech-pill bg-purple-600 text-xs">Busca</span>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-6 card">
+                    <h3 class="font-bold text-lg mb-3">Melhoria de Ortografia</h3>
+                    <div class="text-gray-700">
+                        <p>Sistema para revisão e melhoria automática da ortografia em respostas usando IA generativa.</p>
+                    </div>
+                    <div class="flex flex-wrap mt-3">
+                        <span class="tech-pill bg-blue-600 text-xs">Revisão</span>
+                        <span class="tech-pill bg-indigo-600 text-xs">Ortografia</span>
+                        <span class="tech-pill bg-purple-600 text-xs">Correção</span>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-6 card">
+                    <h3 class="font-bold text-lg mb-3">Análise de Adequação de Questões</h3>
+                    <div class="text-gray-700">
+                        <p>Sistema para verificação da adequação de questões objetivas ao material didático, utilizando IA generativa e critérios da Taxonomia de Bloom e TCT.</p>
+                    </div>
+                    <div class="flex flex-wrap mt-3">
+                        <span class="tech-pill bg-blue-600 text-xs">Verificação</span>
+                        <span class="tech-pill bg-indigo-600 text-xs">Taxonomia</span>
+                        <span class="tech-pill bg-purple-600 text-xs">TCT</span>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-6 card">
+                    <h3 class="font-bold text-lg mb-3">Visualização de Métricas</h3>
+                    <div class="text-gray-700">
+                        <p>Sistema de dashboard para visualização de métricas de questões geradas usando Taxonomia de Bloom e Teoria Clássica dos Testes.</p>
+                    </div>
+                    <div class="flex flex-wrap mt-3">
+                        <span class="tech-pill bg-blue-600 text-xs">Dashboard</span>
+                        <span class="tech-pill bg-indigo-600 text-xs">Métricas</span>
+                        <span class="tech-pill bg-purple-600 text-xs">Visualização</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="publicacoes" class="mb-12">
+            <h2 class="section-title text-3xl font-bold">Publicações Acadêmicas</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-white p-6 card">
+                    <h3 class="font-bold text-lg mb-3">Artigo Qualidade A</h3>
+                    <p class="text-gray-700 mb-3">Publicação em revista científica sobre detecção de lixo nos oceanos.</p>
+                    <a href="https://ojs.revistagesec.org.br/secretariado/article/view/4497" target="_blank" class="text-blue-600 hover:underline flex items-center">
+                        <i class="fas fa-external-link-alt mr-2"></i> Acessar Publicação
+                    </a>
+                </div>
+                
+                <div class="bg-white p-6 card">
+                    <h3 class="font-bold text-lg mb-3">Artigo Qualidade B</h3>
+                    <p class="text-gray-700 mb-3">Publicação sobre desenvolvimento de um CRM educacional para auxílio da gestão de relacionamento com o cliente.</p>
+                    <a href="https://www.researchgate.net/publication/386249733_DESENVOLVIMENTO_DE_UM_CRM_EDUCACIONAL_PARA_AUXILIO_DA_GESTAO_DE_RELACIONAMENTO_COM_O_CLIENTE" target="_blank" class="text-blue-600 hover:underline flex items-center">
+                        <i class="fas fa-external-link-alt mr-2"></i> Acessar Publicação
+                    </a>
+                </div>
+                
+                <div class="bg-white p-6 card md:col-span-2">
+                    <h3 class="font-bold text-lg mb-3">Design Patterns Aplicados ao Desenvolvimento de APIs</h3>
+                    <p class="text-gray-700 mb-3">Artigo sobre padrões de projeto aplicados ao desenvolvimento de APIs, em colaboração com Humberto Patrick e Mateus Valente.</p>
+                    <div class="flex flex-wrap mt-3">
+                        <span class="tech-pill bg-blue-600">Design Patterns</span>
+                        <span class="tech-pill bg-indigo-600">API</span>
+                        <span class="tech-pill bg-purple-600">Desenvolvimento</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-white py-6 shadow-inner no-print">
+        <div class="container mx-auto px-4 text-center text-gray-600">
+            <p>© 2025 Arthur Brenno - Desenvolvedor e Arquiteto de Software</p>
+        </div>
+    </footer>
+
+    <div class="floating-button no-print">
+        <button id="scrollTopBtn" class="bg-blue-600 text-white p-3 rounded-full shadow-lg hover:bg-blue-700 transition">
+            <i class="fas fa-arrow-up"></i>
+        </button>
+    </div>
+
+    <script>
+        // Scroll to top button
+        const scrollTopBtn = document.getElementById('scrollTopBtn');
+        scrollTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                scrollTopBtn.style.display = 'block';
+            } else {
+                scrollTopBtn.style.display = 'none';
+            }
+        });
+        
+        // Download PDF button
+        document.getElementById('downloadBtn').addEventListener('click', () => {
+            const content = document.getElementById('content');
+            const opt = {
+                margin: [10, 10, 10, 10],
+                filename: 'arthur-brenno-curriculo.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            
+            // Add a class to hide elements for the PDF
+            document.body.classList.add('printing');
+            
+            html2pdf().set(opt).from(content).save().then(() => {
+                // Remove the class after PDF is created
+                document.body.classList.remove('printing');
+            });
+        });
+    </script>
+</body>
+</html>
